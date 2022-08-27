@@ -1,0 +1,36 @@
+version: '3.2'
+
+volumes:
+  mysql_data:
+
+
+networks:
+  backend:
+
+
+services:
+  mysql:
+    image: 'mysql:5.7.10'
+    ports:
+      - '3306:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: 'every'
+      MYSQL_USER: 'every'
+      MYSQL_PASSWORD: 'every'
+      MYSQL_DATABASE: 'every-test'
+    networks:
+      - backend
+    restart: always
+
+  api:
+    build: ./
+    ports:
+      - 3000:3000
+    networks:
+      - backend
+    depends_on:
+      - mysql
+    env_file:
+      - ./.env
+    volumes:
+      - "./src:/usr/src/app/src"
